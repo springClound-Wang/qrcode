@@ -81,7 +81,7 @@ public class TestController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return  "访问地址{}:"+"http://59.110.64.4:8090/img/index.html?id="+uploadUrl;
+        return  "访问地址{}:"+"http://59.110.64.4:8090/img/diaolan.html?id="+uploadUrl;
     }
 
     @ApiOperation("覆盖图片")
