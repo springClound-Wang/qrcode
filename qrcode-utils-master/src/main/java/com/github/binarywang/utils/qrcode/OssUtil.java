@@ -74,7 +74,7 @@ public class OssUtil {
         return null;
     }
 
-    public String upLoad2(File file){
+    public String upLoad2(File file ,String value){
         logger.info("------OSS文件上传开始--------"+file.getName());
         String endpoint=constantConfig.getLXIMAGE_END_POINT();
         String accessKeyId=constantConfig.getLXIMAGE_ACCESS_KEY_ID();
@@ -97,7 +97,7 @@ public class OssUtil {
                 createBucketRequest.setCannedACL(CannedAccessControlList.PublicRead);
                 client.createBucket(createBucketRequest);
             }
-            String str= "a";
+            String str= value;
             // 设置文件路径和名称
             String fileUrl = fileHost + "/" +str+".png";
             // 上传文件

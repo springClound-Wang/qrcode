@@ -87,7 +87,7 @@ public class TestController {
     @ApiOperation("覆盖图片")
     @ResponseBody
     @PostMapping("/img2")
-    public String img2(@RequestParam("file") MultipartFile file){
+    public String img2(@RequestParam("file") MultipartFile file,String value){
         logger.info("文件上传");
         String filename = file.getOriginalFilename();
         String uploadUrl="";
@@ -101,7 +101,7 @@ public class TestController {
                     os.close();
                     file.transferTo(newFile);
                     // 上传到OSS
-                    uploadUrl = aliyunOSSUtil.upLoad2(newFile);
+                    uploadUrl = aliyunOSSUtil.upLoad2(newFile,value);
                 }
 
             }
