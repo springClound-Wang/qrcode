@@ -2,18 +2,20 @@ package com.github.binarywang.utils.qrcode;
 
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +38,7 @@ public class TestController {
     private static Logger logger = LoggerFactory.getLogger(TestController.class);
 
     private List<Path> generatedQrcodePaths = Lists.newArrayList();
-
+    @ApiOperation("生成二维码")
     @GetMapping(value = "/getImg",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] getImg(String content) throws IOException {
@@ -50,5 +52,62 @@ public class TestController {
         byte[] bytes1 = new byte[inputStream.available()];
         inputStream.read(bytes1, 0, inputStream.available());
         return bytes;
+    }
+
+    @Autowired
+    private OssUtil aliyunOSSUtil;
+
+    @ApiOperation("上传新的图片图片")
+    @ResponseBody
+    @PostMapping("/upfile")
+    public String upfile(@RequestParam("file") MultipartFile file){
+        logger.info("文件上传");
+        String filename = file.getOriginalFilename();
+        String uploadUrl="";
+        try {
+
+            if (file!=null) {
+                if (!"".equals(filename.trim())) {
+                    File newFile = new File(filename);
+                    FileOutputStream os = new FileOutputStream(newFile);
+                    os.write(file.getBytes());
+                    os.close();
+                    file.transferTo(newFile);
+                    // 上传到OSS
+                     uploadUrl = aliyunOSSUtil.upLoad(newFile);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return  "访问地址{}:"+"http://59.110.64.4:8090/img/index.html?id="+uploadUrl;
+    }
+
+    @ApiOperation("覆盖图片")
+    @ResponseBody
+    @PostMapping("/img2")
+    public String img2(@RequestParam("file") MultipartFile file){
+        logger.info("文件上传");
+        String filename = file.getOriginalFilename();
+        String uploadUrl="";
+        try {
+
+            if (file!=null) {
+                if (!"".equals(filename.trim())) {
+                    File newFile = new File(filename);
+                    FileOutputStream os = new FileOutputStream(newFile);
+                    os.write(file.getBytes());
+                    os.close();
+                    file.transferTo(newFile);
+                    // 上传到OSS
+                    uploadUrl = aliyunOSSUtil.upLoad2(newFile);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return  "访问地址{}:"+"http://59.110.64.4:8090/img/index1.html";
     }
 }
