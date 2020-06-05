@@ -2,8 +2,8 @@
 #OSS配置
 lximage:
   endpoint : oss-cn-beijing.aliyuncs.com
-  keyid : LTAI4G8Q4EQ9LBQdVUxEiwCD
-  keysecret : yaAMSSag5qyBfIIaKssS4k5ROuNbqz
+  keyid : 
+  keysecret : 
   bucketname1 : myqrc
   filehost : file
   url : https://myqrc.oss-cn-beijing.aliyuncs.com/
